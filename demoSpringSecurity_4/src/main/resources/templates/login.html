@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - IOTSTAR.VN</title>
+</head>
+<body>
+<div style="max-width: 400px; margin: 0 auto; padding-top: 50px;">
+    <h2>Login</h2>
+    <!-- Login form -->
+    <form th:action="@{/login}" method="post">
+        <div style="margin-bottom: 20px;">
+            <label for="username">E-mail:</label>
+            <input type="text" name="username" id="username" required style="width: 100%; padding: 10px;" />
+        </div>
+        <div style="margin-bottom: 20px;">
+            <label for="password">Password:</label>
+            <input type="password" name="password" id="password" required style="width: 100%; padding: 10px;" />
+        </div>
+        <div>
+            <input type="submit" value="Login" style="width: 100%; padding: 10px; background-color: #4CAF50; color: white; border: none;" />
+        </div>
+    </form>
+</div>
+</body>
+</html>
