@@ -1,7 +1,10 @@
 package vn.iotstar.configs;
 
-import java.util.List;
 import static org.springframework.security.config.Customizer.withDefaults;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,17 +12,20 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.authentication.configuration.GlobalAuthenticationConfigurerAdapter;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import vn.iotstar.services.Impl.CustomUserDetailsService;
 import vn.iotstar.services.Impl.UserServiceImpl;
+
+
+
 
 @Configuration
 @EnableWebSecurity
@@ -47,8 +53,22 @@ public class WebSecurityConfig {
         return authProvider;
     }
 
+  
+    
+    protected void configurate(AuthenticationManagerBuilder auth) throws Exception{
+		auth.userDetailsService(userDetailsService)
+		.passwordEncoder(passwordEncoder());
+	}
+    
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+        final List<GlobalAuthenticationConfigurerAdapter> configurers = new ArrayList<>();
+        configurers.add(new GlobalAuthenticationConfigurerAdapter() {
+        	@Override
+        	public void configure(AuthenticationManagerBuilder auth) throws Exception{
+        		
+        	}
+		});
         return authConfig.getAuthenticationManager();
     }
 
@@ -56,7 +76,7 @@ public class WebSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(authorize -> 
+                .authorizeHttpRequests((authorize) -> 
                     authorize
                         .requestMatchers("/").hasAnyAuthority("USER", "ADMIN", "EDITOR", "CREATOR")
                         .requestMatchers("/new").hasAnyAuthority("ADMIN", "CREATOR")

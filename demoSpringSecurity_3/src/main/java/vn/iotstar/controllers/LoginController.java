@@ -1,5 +1,7 @@
 package vn.iotstar.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,8 +16,6 @@ import vn.iotstar.entity.Product;
 import vn.iotstar.services.ProductServices;
 
 
-import java.util.List;
-
 @Controller
 public class LoginController {
 
@@ -27,7 +27,7 @@ public class LoginController {
     public String loginSuccessHandler() {
         System.out.println("Logging user login success...");
         // Redirect to the home page or any other page after successful login
-        return "redirect:/";
+        return "index";
     }
 
     // Failure handler for login
